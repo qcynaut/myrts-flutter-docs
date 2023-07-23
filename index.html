@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 6.2.2">
+  <meta name="description" content="myrts_flutter API docs, for the Dart programming language.">
+  <title>myrts_flutter - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">myrts_flutter package</li>
+  </ol>
+  <div class="self-name">myrts_flutter</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="myrts_flutter">myrts_flutter</h1>
+<p>MyRTS sdk for flutter.</p>
+<h2 id="installation">Installation</h2>
+<p>Add this line into your pubspec.yaml</p>
+<pre class="language-yaml"><code class="language-yaml">myrts_flutter:
+    git:
+        url: https://github.com/qcynaut/myrts_flutter.git
+</code></pre>
+<p>make sure you are added your ssh key into your ssh agent.</p>
+<h2 id="usage">Usage</h2>
+<p>To connect to the MyRTS server, you can create MyRTS object like below example.</p>
+<pre class="language-dart"><code class="language-dart">Future&lt;void&gt; connect() async {
+    try {
+        final url = "wss://socket.myrts.id"; // socket server of the MyRTS.
+        final myrts = await MyRTS.create(url, 5);
+        // the code above will try to connect to the MyRTS server at the given url, and we set the connection
+        // timeout so it will not wait forever.
+        // if the timeout has been reached, it will throw an error.
+        setState({
+            // do something after connection has been established.
+        });
+    } catch(err) {
+        // do something with the error.
+    }
+}
+</code></pre>
+<p>Once we got the connection established, the next step we want to identified our device so we can begin using the MyRTS.</p>
+<pre class="language-dart"><code class="language-dart">Future&lt;void&gt; auth() async {
+    try {
+        final id = "1234"; // the user id.
+        final name = "John Doe"; // the user name.
+        final result = await myrts.auth(id, name);
+        // the code above will try to authenticate the user with the given id and name.
+        // it will return AuthResponse object.
+        if (result.success) {
+            // do something after authentication has been established.
+        } else {
+            final message = result.message;
+            // do something with the error.
+        }
+    } catch(err) {
+        // do something with the error.
+    }
+}
+</code></pre>
+<p>After we got authenticated, we will be able to receive realtime data update via MyRTS event.
+This listener should be added before we authenticate the user.</p>
+<pre class="language-dart"><code class="language-dart">final myrts = await MyRTS.create(url, 5);
+myrts.onData((data) {
+    // do something with the data.
+});
+</code></pre>
+<p>Before we can start broadcasting, we need to create room for broadcast.</p>
+<pre class="language-dart"><code class="language-dart">final res = await MyRTS.createRoom(name); // create a room.
+</code></pre>
+<p>After this room we can add or remove members to the room.</p>
+<pre class="language-dart"><code class="language-dart">await res.addMember(["1234"]); // the addMember function receives list of user ids.
+// it will return AddRoomMemberResponse object.
+
+await res.removeMember(["1234"]); // the removeMember function receives list of user ids.
+// it will return RemoveRoomMemberResponse object.
+</code></pre>
+<p>Now we can start the broadcast.</p>
+<pre class="language-dart"><code class="language-dart">await res.startBroadcast();
+</code></pre>
+<p>And we can stop the broadcast.</p>
+<pre class="language-dart"><code class="language-dart">await res.stopBroadcast();
+</code></pre>
+<p>Available event listener.</p>
+<pre class="language-dart"><code class="language-dart">MyRTS.onData((data) {
+    
+})
+
+MyRTS.onAuthStateChanged((state) {
+    
+})
+
+MyRTS.onDisconnect(() {
+    
+})
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="myrts_flutter">
+  <span class="name"><a href="myrts_flutter/myrts_flutter-library.html">myrts_flutter</a></span> 
+
+</dt>
+<dd>myrts_flutter
+MyRTS SDK for flutter
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li class="self-crumb">myrts_flutter package</li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">myrts_flutter</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="myrts_flutter/myrts_flutter-library.html">myrts_flutter</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    myrts_flutter
+      0.1.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
